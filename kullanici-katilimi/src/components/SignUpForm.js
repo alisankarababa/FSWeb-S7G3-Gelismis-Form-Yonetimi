@@ -16,32 +16,6 @@ const initialFormData = {
     terms: false,
 }
 
-const formSchema = Yup.object().shape({
-    first_name: Yup
-        .string()
-        .min(3, "Firstname cannot be shorter than 3 character.")
-        .required("Firstname cannot be empty."),
-    last_name: Yup
-        .string()
-        .min(3, "Lastname cannot be shorter than 3 characters.")
-        .required("Lastname cannot be empty."),
-    position: Yup
-        .string()
-        .required("Position is required.")
-        .oneOf(["Backend Engineer", "Frontend Engineer", "Design Engineer"], "You must select a position."),
-    email: Yup
-      .string()
-      .email("Must be a valid email address.")
-      .required("E-mail cannot be empty."),
-    password: Yup
-      .string()
-      .required("Password cannot be empty")
-      .min(6, "Passwords must be at least 6 characters long."),
-    terms: Yup
-      .boolean()
-      .oneOf([true], "You must accept Terms and Conditions")
-      // required isn't required for checkboxes.
-});
 
 
   
@@ -60,15 +34,41 @@ function SignUpForm(props) {
     const {memberToBeEdited, hEditMember, teamList, hTeamList} = props;
 
     
-
-
+    const formSchema = Yup.object().shape({
+        first_name: Yup
+            .string()
+            .min(3, "Firstname cannot be shorter than 3 character.")
+            .required("Firstname cannot be empty."),
+        last_name: Yup
+            .string()
+            .min(3, "Lastname cannot be shorter than 3 characters.")
+            .required("Lastname cannot be empty."),
+        position: Yup
+            .string()
+            .required("Position is required.")
+            .oneOf(["Backend Engineer", "Frontend Engineer", "Design Engineer"], "You must select a position."),
+        email: Yup
+          .string()
+          .email("Must be a valid email address.")
+          .required("E-mail cannot be empty.")
+          .notOneOf(teamList.map(member => member.email).filter(email => email !== memberToBeEdited?.email),"This email is already taken"),
+        password: Yup
+          .string()
+          .required("Password cannot be empty")
+          .min(6, "Passwords must be at least 6 characters long."),
+        terms: Yup
+          .boolean()
+          .oneOf([true], "You must accept Terms and Conditions")
+          // required isn't required for checkboxes.
+    });
+    
     useEffect(() => {
         formSchema
             .isValid(formData)
             .then((valid) => setIsFormDataValid(valid));
-    }, [formData]);
-        
-    
+    }, [formSchema, formData]);
+
+
     const history = useHistory();
 
     function hChange(event) {

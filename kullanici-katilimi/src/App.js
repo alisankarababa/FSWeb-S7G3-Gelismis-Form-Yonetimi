@@ -54,7 +54,7 @@ function App() {
             <HomePage hMemberToBeEdited={hMemberToBeEdited} teamList={teamList}/>
         </Route>
         <Route exact path="/signup">
-            <SignUp memberToBeEdited={memberToBeEdited} hEditMember={hEditMember} teamList={teamList} hTeamList={hTeamList}/>
+            <SignUp memberToBeEdited={memberToBeEdited} teamList={teamList} hEditMember={hEditMember} hTeamList={hTeamList}/>
         </Route>
     </div>
     );
